@@ -66,8 +66,8 @@ class ArchiveAPIFile(APIView):
 
 
 class GetFile(APIView):
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get(self, request):
         # data = dict()
@@ -101,8 +101,9 @@ class ArchiveAPI(APIView):
 
     def get(self, request):
         user = request.user
-        AllFilesUser = Files.objects.filter(user_id_id=user.pk)
-        return Response({'files': ArchiveSerializer(AllFilesUser, many=True).data})
+        AllFilesUser = Files.objects.filter(user_id_id=user.pk).values("name","created_at")
+        return Response({"files":AllFilesUser})
+        # return Response({'files': ArchiveSerializer(AllFilesUser, many=True).data})
         # return Response("succses")
         # jwt.decode(encoded, key, algorithms="HS256")
         # a=request.META.get('HTTP_AUTHORIZATION')
